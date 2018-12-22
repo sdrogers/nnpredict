@@ -33,7 +33,7 @@ def load_fingerprints_master(path, number_of_rows=0):
     BITS = 320  # Total number of bits in fingerprint
 
     # number_of_rows to skip, e.g. headers
-    fp_all = np.loadtxt(path, dtype="U25", skiprows=number_of_rows)  # Get master file as numpy array of Strings
+    fp_all = np.loadtxt(path, dtype="U105", skiprows=number_of_rows)  # Get master file as numpy array of Strings
     fp_ids = np.unique(fp_all[:, 0])  # Trim duplicate filename rows, store unique filenames
 
     # Construct empty Pandas dataframe of correct size.
@@ -54,7 +54,7 @@ def load_fingerprints_master(path, number_of_rows=0):
 def load_families_master(path):
     BITS = 8  # Total number of bits in families
 
-    fp_all = np.loadtxt(path, dtype="U25")  # Get master file as numpy array of Strings
+    fp_all = np.loadtxt(path, dtype="U105")  # Get master file as numpy array of Strings
     fp_ids = np.unique(fp_all[:, 0])  # Trim duplicate filename rows, store unique filenames
 
     # Construct empty Pandas dataframe of correct size.
@@ -77,19 +77,26 @@ def load_fingerprint_legend(path):
         # Add each name to the list of substructure names.
         lines = list(islice(f, 0, None))
         for line in lines:
-            fingerprint_legend.append(line)
+            if line.endswith("\n"):
+                fingerprint_legend.append(line[:-1])
+            else:
+                fingerprint_legend.append(line)
+
     return fingerprint_legend
 
 
 # Load the names of all families included in the correct order
 def load_family_legend(path):
     family_legend = []
-    # Open file containing substructure names.
+    # Open file containing family names.
     with open(path, 'r') as f:
-        # Add each name to the list of substructure names.
+        # Add each name to the list of family names.
         lines = list(islice(f, 0, None))
         for line in lines:
-            family_legend.append(line)
+            if line.endswith("\n"):
+                family_legend.append(line[:-1])
+            else:
+                family_legend.append(line)
     return family_legend
 
 

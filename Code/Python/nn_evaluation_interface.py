@@ -224,3 +224,52 @@ def hinton(matrix, max_weight=None, ax=None):
 
     ax.autoscale_view()
     ax.invert_yaxis()
+
+
+def compute_predicted_family_proportion(path, legend, ids, predicted):
+    family_dict = {}
+    family_counter_dict = {}
+    family_missed_highest = {}
+    mol_family_dict = {}
+    total = 0
+
+    for family in legend:
+        family_dict[family] = 0
+        family_counter_dict[family] = 0
+        family_missed_highest[family] = 0
+
+    with open(path, 'r') as f:
+        for line in f:
+            mol_id, family_index, value = line.split(" ")
+            family_dict[legend[int(family_index)]] += 1
+            total += 1
+
+            if mol_id not in mol_family_dict:
+                mol_family_dict[mol_id] = {}
+                mol_family_dict[mol_id]["families"] = []
+                mol_family_dict[mol_id]["probabilities"] = []
+
+            mol_family_dict[mol_id]["families"].append(legend[int(family_index)])
+
+    for index, probabilities in enumerate(predicted):
+        probabilities = list(probabilities)
+        mol_family_dict[ids[index]]["probabilities"] = probabilities
+        true_labels = mol_family_dict[ids[index]]["families"]
+        index_of_maximum = probabilities.index(max(probabilities))
+        if legend[index_of_maximum] in true_labels:
+            family_counter_dict[legend[index_of_maximum]] += 1
+
+    for family in legend:
+        for id, details in mol_family_dict.items():
+            index_of_maximum = details["probabilities"].index(max(details["probabilities"]))
+            if family not in details["families"] and index_of_maximum == legend.index(family):
+                family_missed_highest[family] += 1
+
+    print("Family, proportion guessed correctly, proportion missed")
+
+    for family in family_dict:
+        if family_dict[family] == 0:
+            print(family, "no sample")
+        else:
+            print(family + ", " + str(family_counter_dict[family]/family_dict[family] * 100) +
+                 ", " + str(family_missed_highest[family]/(total-family_dict[family]) * 100))

@@ -251,6 +251,8 @@ def compute_predicted_family_proportion(path, legend, ids, predicted):
 
             mol_family_dict[mol_id]["families"].append(legend[int(family_index)])
 
+    print(family_dict)
+
     for index, probabilities in enumerate(predicted):
         probabilities = list(probabilities)
         mol_family_dict[ids[index]]["probabilities"] = probabilities

@@ -1,38 +1,5 @@
-# linked_gnps_files.py
 import os
 import pandas as pd
-
-### LINKED GNPS FILES important files
-## gnps_dir
-# datapath = "G:\\Dev\\Data\\GNPS For Family Test Q1"
-
-## input
-# final_data_path = "G:\\Dev\\Data\\For Family Test Q1\\GNPS Python Master\\Final Data.txt"
-# final_fingerprints_data_path = "G:\\Dev\\Data\\For Family Test Q1\\GNPS Python Master\\Final Fingerprints.txt"
-# final_data_with_fragments_path = "G:\\Dev\\Data\\For Family Test Q1\\GNPS Python Master\\Final Data With Fragments.txt"
-
-## output
-# filtered_final_data_path = "G:\\Dev\\Data\\For Family Test Q1\\GNPS Python Master\\Final Data.txt"
-# filtered_final_fingerprints_data_path = "G:\\Dev\\Data\\For Family Test Q1\\GNPS Python Master\\Final Fingerprints.txt"
-# filtered_final_data_with_fragments_path = "G:\\Dev\\Data\\For Family Test Q1\\GNPS Python Master\\Final Data With Fragments.txt"
-
-## linked file
-# linked_gnps_path = "G:\\Dev\\Data\\Linked GNPS Fingerprints.tsv"
-
-### MIBIG GNPS LINKS EXTRACTOR important files
-# datapath = "G:\\Dev\\Data\\mibig_gnps_links_q1.csv"
-# mibig_family_path = "G:\\Dev\\Data\\mibig_family\\gene_family.txt"
-# gnps_family_path = "G:\\Dev\\Data\\gnps_family.txt"
-# gnps_5770_datapath = "G:\\Dev\\Data\\1000\\GNPS Python Master\\Final Fingerprints.txt"
-# gnps_datapath = "G:\\Dev\\Data\\Fingerprint Bitmaps 2\\Mega big GNPS Final Fingerprints.txt"
-# mibig_datapath = "G:\\Dev\\Data\\Fingerprint Bitmaps 2\\mibig_unique_smiles.txt"
-# filtered_mibig_path = "G:\\Dev\\Data\\Filtered Mibig GNPS Links\\Filtered Mibig Fingerprints.tsv"
-# filtered_gnps_path = "G:\\Dev\\Data\\Filtered Mibig GNPS Links\\Filtered GNPS Fingerprints.tsv"
-# reverse_filtered_gnps_path = "G:\\Dev\\Data\\Filtered Mibig GNPS Links\\Reverse Filtered GNPS Fingerprints.tsv"
-# reverse_filtered_mibig_path = "G:\\Dev\\Data\\Filtered Mibig GNPS Links\\Reverse Filtered Mibig Fingerprints.tsv"
-# missing_gnps_path = "G:\\Dev\\Data\\Filtered Mibig GNPS Links\\Missing ALL GNPS.tsv"
-# linked_gnps_path = "G:\\Dev\\Data\\Linked GNPS Fingerprints.tsv"
-# gnps_need_fragments_path = "G:\\Dev\\Data\\Missing Fragments GNPS.txt"
 
 
 def filter_gnps_dir(input_dir, linked_file):
@@ -98,36 +65,12 @@ def get_gnps_families(true_family_path, family_names, linked_mibig_gnps_path, gn
             mibig_gnps_dict[row["gnps_id"]] = set()
         mibig_gnps_dict[row["gnps_id"]].add(row["#mibig_id"])
 
-    # with open(gnps_families_file, 'w') as f:
-    #     for gnps_id, mibig_ids in mibig_gnps_dict.items():
-    #         for mibig_id in mibig_ids:
-    #             f.write(gnps_id + " " + str(mibig_family[mibig_id]) + " 1\n")
-    #             family_count[family_names[mibig_family[mibig_id]]] += 1
-
-    print(mibig_gnps_dict)
-
     with open(gnps_families_file, 'w') as f:
         for index, row in linked_gnps_df.iterrows():
             for mibig_id in mibig_gnps_dict[row["gnps_id"]]:
                 if row["gnps_id"] not in family_count[family_names[mibig_family[mibig_id]]]:
                     family_count[family_names[mibig_family[mibig_id]]].add(row["gnps_id"])
                     f.write(row["gnps_id"] + " " + str(mibig_family[mibig_id]) + " 1\n")
-            # for mibig_id in mibig_gnps_dict[row["gnps_id"]]:
-            #     family_count[family_names[mibig_family[mibig_id]]].add(row["gnps_id"])
-            #     f.write(row["gnps_id"] + " " + str(mibig_family[mibig_id]) + " 1\n")
 
     for family, gnps_ids in family_count.items():
         print(family + "," + str(len(gnps_ids)))
-
-# mega_list = []
-# for gnps_id, families in gnps_family.items():
-#         mega_list.extend(families)
-# c = Counter(mega_list)
-#
-# print(c)
-#
-# with open(gnps_family_path, 'w') as f:
-#     for gnps_id, families in gnps_family.items():
-#         for family in families:
-#             f.write(gnps_id + " " + str(family) + " 1\n")
-# print(len(gnps_family))

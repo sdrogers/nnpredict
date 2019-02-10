@@ -22,9 +22,7 @@ def load_master_file(path, mass_shifts=0, number_of_bins=1000):
     for row in mol_all:
         intensities.at[row[0], float(row[1]) - 1] = float(row[2])
 
-    # Convert populated dataframe into a numpy array for use by neural networks.
-    np_matrix = intensities.values
-    return np_matrix
+    return intensities
 
 
 # Load a master file containing CDK fingerprints for all molecules.

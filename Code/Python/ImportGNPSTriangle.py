@@ -78,5 +78,4 @@ def write_binned_files(bin_size=1):
                 mass = index*bin_size
                 f.write(str(mass+1) + "  " + str(intensity) + "\n")
 
-#write_binned_files(bin_size=1)
-print(calculate_value(1, 1000))
+write_binned_files(bin_size=1)
